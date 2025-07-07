@@ -1,36 +1,140 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Auth Dashboard - Next.js (Frontend)
 
-## Getting Started
+This is a Next.js + React admin dashboard for managing users of the Toggo App Auth Service. Admins can:
 
-First, run the development server:
+- View registered users
+- Create users and send verification email
+- Edit users (set active/inactive, change role between admin and standard)
+- View email verification status
+
+---
+
+## 🛠 Tech Stack
+
+- **Next.js App Router**
+- **React 19**
+- **Tailwind CSS**
+- **Lucide React** (icons)
+- **Cookie-based JWT auth**
+- **Fetch API** to Go backend
+
+---
+
+## 📦 Installation
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/your-org/auth-dashboard.git
+cd auth-dashboard
+```
+
+2. **Install dependencies**
+
+```bash
+npm install
+```
+
+3. **Set environment variables**
+
+Create a `.env.local` file:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8080
+```
+
+This should point to your Go backend service.
+
+---
+
+## 🚀 Running Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Runs on [http://localhost:3001](http://localhost:3001)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Make sure your Go backend is running on `http://localhost:8080`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🔐 Auth & Routing
 
-To learn more about Next.js, take a look at the following resources:
+- Protected routes: `/`, `/users`
+- Public routes: `/login`, `/register`, `/verify`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Middleware checks for a valid `token` cookie. If absent, users are redirected to `/login`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🧪 Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### ✅ Login
+- JWT stored in HTTP-only cookie.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### ✅ Dashboard
+- Lists all users with:
+  - Email
+  - Verification status
+  - Activation status
+  - Role (Admin / Standard)
+
+### ✅ Create User
+- Admins can create new users and send verification email.
+
+### ✅ Edit User
+- Toggle active status
+- Change user type (admin or standard)
+
+### ✅ Verify User
+- `/verify?token=...&email=...` handles verification without needing to enter a code.
+
+---
+
+## 📝 File Structure
+
+```
+app/
+  ├── layout.tsx
+  ├── page.tsx             # Home (Dashboard)
+  ├── users/
+  │   └── page.tsx         # Users listing
+  ├── login/
+  │   └── page.tsx
+  ├── register/
+  │   └── page.tsx
+  ├── verify/
+  │   ├── page.tsx
+  │   └── layout.tsx       # Public layout (no navbar)
+components/
+  ├── Navbar.tsx
+  ├── UserTable.tsx
+  └── CreateUserForm.tsx
+lib/
+  └── api.ts               # Fetch helpers
+middleware.ts              # JWT auth check
+```
+
+---
+
+## 🧼 Useful Scripts
+
+```bash
+npm run build    # Build the app
+npm run lint     # Lint code
+```
+
+---
+
+## 🛡️ Environment
+
+Ensure CORS is allowed from `http://localhost:3001` in your Go server.
+
+In production, you can reverse proxy or set environment domains securely.
+
+---
+
+## 🤝 Credits
+
+Built with ❤️ using Next.js, Go, and Mailjet.
